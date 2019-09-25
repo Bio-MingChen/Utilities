@@ -1,5 +1,6 @@
 # Utilities
 A lot of common and useful tools and functions
 
-* [Set `logging` basic config](https://github.com/KingCM/Utilities/blob/master/logging.py)
+* [Set `logging` basic config](https://github.com/KingCM/Utilities/blob/master/python/set_logging.py)
 
+* [Class TitleParser:Get indicated column element by title name](https://github.com/KingCM/Utilities/blob/master/python/TitleParser.py)
