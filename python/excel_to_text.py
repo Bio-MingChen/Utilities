@@ -24,6 +24,8 @@ def excel_to_txt(args):
         sheet_list += [book.sheetnames[int(i)] for i in sheet_number.strip().split(',')]
     if sheet_name and (sheet_name not in sheet_list):
         sheet_list += [sheet_name]
+    if (not sheet_number) and (not sheet_name):
+        sheet_list = book.sheetnames
     if sheet_list:
         for sheet in sheet_list:
             ofile = sheet + time + '.xls'
