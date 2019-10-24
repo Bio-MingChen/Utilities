@@ -31,7 +31,7 @@ def excel_to_txt(args):
             with open(ofile,'w') as odata:
                 for row in book[sheet]:
                     row_list = [cell.value for cell in row]
-                    row_list = ['' if i is None else i for i in row_list]
+                    row_list = [args.get('handle_NA') if i is None else i for i in row_list]
                     odata.write("\t".join(row_list) + "\n")
         print('Writing Completion.') 
     else:
@@ -51,5 +51,7 @@ if __name__ == "__main__":
     parser.add_argument('excel',help='Excel Name')
     parser.add_argument('--sheet_number','-num',help='The index of sheet number zero-based')
     parser.add_argument('--sheet_name','-name',help='The sheet name')
+    parser.add_argument('--handle_NA','-NA',default='',
+        help='what shold be used to replace None objects[default:""]')
     args = parser.parse_args()
     excel_to_txt(vars(args))
