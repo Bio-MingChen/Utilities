@@ -8,6 +8,10 @@ class TitleParser():
         self.title_list = [i.lower() for i in title.strip().split('\t')]
 
     def get_field(self,line_list,colname):
+        """
+        Reading in a list and returning the element with the 
+        index which colname in title's list
+        """
         if len(self.title_list) != len(line_list):
             raise Exception("Title length differs with line!")
         try:
@@ -17,6 +21,14 @@ class TitleParser():
             return None
 
         return line_list[idx]
+
+    def have_title(self,colname):
+        """
+        Judging whether a colname is in title
+        """
+        if str(colname).lower() in self.title_list:
+            return True
+        return False
  
  if __name__ == "__main__":
     title = 'ColA\tColB\tColC\n'
