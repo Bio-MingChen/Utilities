@@ -4,7 +4,7 @@ A lot of common and useful tools and functions
 * Useful functions  
     * [**Setting logging**](./func/mk_logging.py): functions to set logging config
 
-    * [**File operation**](./func/file_opeartion.py): functions to read or write different type files or make it easier
+    * [**File operation**](./func/file_operation.py): functions to read or write different type files or make it easier
 
     * [**Make output beautiful**](./func/show.py): functions to make command line output colorful and beautiful
 
