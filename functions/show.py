@@ -1,9 +1,15 @@
+# -*- coding=utf-8 -*-
+
+#Functions in this scripts are used to make output pretty
+
 import colorama
 
+
+
 def make_colors():
-"""
-make some colors in command line
-"""
+    """
+    make some colors in command line
+    """
     colors = {}
     colorama.init()
     colors['red'] = colorama.Fore.RED
@@ -19,6 +25,3 @@ make some colors in command line
     colors['back'] = colorama.Style.RESET_ALL
     return colors
     
-if __name___ == "__main__":
-    colors_dict = make_colors()
-    print('{green}Using colorama to print {red}colorful {back}'.format(**colors_dict))
