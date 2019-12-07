@@ -5,7 +5,7 @@ import sys
 sys.path.append('../') #used for import modules from upper directory
 
 import pytest
-from functions import file_operation
+from func import file_operation
 
 def test_titleparser():
     """

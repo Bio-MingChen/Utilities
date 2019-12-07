@@ -5,7 +5,7 @@ sys.path.append('../')
 
 import pytest
 
-from functions.show import *
+from func.show import *
 
 def test_colors():
     """

@@ -6,7 +6,7 @@ import sys
 sys.path.append('../')
 
 import pytest
-from functions.mk_logging import *
+from func.mk_logging import *
 
 def test_basic_log():
     logger1 = basic_log('test')
