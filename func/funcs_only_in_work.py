@@ -8,6 +8,7 @@
 # path_is valid is used to check a path is valid and
 # have at lest one fastq file in it
 #=====================================
+
 def path_is_valid(path,lib,idx):
     """
     check the valid of path
