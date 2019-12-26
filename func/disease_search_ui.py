@@ -148,8 +148,7 @@ class SearchDisease():
             if std == 'q':
                 exit(0)
             elif std == 'all':
-                search_code[r] = [i[0] for i in results[r]]
-                break
+                std_list = _id_list
             elif re.search('l=([\d]+)',std) or re.search('c=([\d]+)',std):
                 if re.search('l=([\d]+)',std):
                     limit = int(re.search('l=([\d]+)',std).group(1))
@@ -175,11 +174,11 @@ class SearchDisease():
                         else:
                             std_list.add(int(i))
                     print(std_list)
-                    selected_ids = [_id_list[idx] for idx in std_list]
-                    results_dict = OrderedDict()
-                    for _id in selected_ids:
-                        results_dict[_id] = self.query_dict[_id]
-                    break
+            selected_ids = [_id_list[idx] for idx in std_list]
+            results_dict = OrderedDict()
+            for _id in selected_ids:
+                results_dict[_id] = self.query_dict[_id]
+            break
         print(results_dict)
         return results_dict
     
