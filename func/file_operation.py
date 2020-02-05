@@ -4,6 +4,7 @@
 #like open files by their file type or get columns by file title etc.
 
 import gzip
+import docx
 
 #=======================================================
 #TitleParser is used to get columns by file's title name
@@ -64,5 +65,127 @@ def gopen(filename,mode):
 
     return open(filename,mode)
 
+#========================================
+#Class DocxApi help to operate Words easier 
+#like add paragraph,picture or table to the
+# place you want to insert etc.
+#========================================
+class DocxApi():
+    """
+    docx api implement adding,replacing and deletion operation
+    """
+    def __init__(self,docx_file):
+        self.doc = docx.Document(docx_file) if docx_file else docx.Document()
 
+    def set_font(self,en_style='Times New Roman',zh_style='微软雅黑'):
+        """
+        set global font 
+        """
+        self.doc.styles['Normal'].font.name = en_style
+        self.doc.styles['Normal']._element.rPr.rFonts.set(docx.oxml.ns.qn('w:eastAsia'),zh_style.decode('utf-8'))
+
+    def set_para_font_size(self,paragraph,size=10.5):
+        """
+        set paragraph font size
+        """
+        for run in paragraph.runs:
+            run.font.size = docx.shared.Pt(size)
+        
+        return paragraph
+
+    def set_tab_font_size(self,table,size=10.5):
+        """
+        set table font size
+        """
+        for row in table.rows:
+            for cell in row.cells:
+                for pargraph in cell.paragraphs:
+                    self.set_para_font_size(pargraph,size=size)
+        return table
+
+    def add_picture(self,pic_path,width=5.0):
+        """
+        In order to move picture to some place you want put them
+        here this function will build a new paragprah and then 
+        use the 'run.add_picture()' method to add picture. After that,
+        you can move it like moving a paragraph to insert to docx or
+        justify styles.
+        
+        Width 5.0 is the proper picture width in Test,you can change it
+        to match your need.
+        """
+        paragraph = self.doc.add_paragraph()
+        run = paragraph.add_run()
+        run.add_picture(pic_path,width=docx.shared.Inches(width))
+        return paragraph
+
+    def add_page_break(self):
+        """
+        start from new page
+        """
+        self.doc.add_page_break()
+
+    def delete_tab_para(self,table):
+        """
+        delete table or paragraph
+        """
+        table._element.getparent().remove(table._element)
+        print('remove complete!')
+
+    def add_paras(self,content):
+        """
+        add a new paragraph
+        """
+        return self.doc.add_paragraph(content.decode('utf-8'))
+
+    def add_table(self,table_list):
+        """
+        add a new table
+        table_list : [[1,2,3],[4,5,6],...]
+        """
+        nrow = len(table_list)
+        ncol = len(table_list[0])
+        print(nrow,ncol)
+        table = self.doc.add_table(0,ncol)
+        for row in table_list:
+            row_cells = table.add_row().cells
+            for idx,cell in enumerate(row):
+                try:
+                    row_cells[idx].text = cell.decode('utf-8')
+                except:
+                    row_cells[idx].text = cell
+                    # print("{cell} of {row} can\'t be decode correctly!".format(cell=cell,row=row))
+                    # print(cell,row)
+                    # exit(1)
+        return table
+
+    def move_obj(self,obj,tag):
+        """
+        move the obj to the next of tag
+        """
+        if isinstance(obj,docx.table.Table):
+            obj = obj._tbl
+        elif isinstance(obj,docx.text.paragraph.Paragraph):
+            obj = obj._p
+        else:
+            print('UnKnown type of input object!')
+            exit(1)
+        for paragraph in self.doc.paragraphs:
+            if paragraph.text.startswith(tag.decode('utf-8')):
+                paragraph._p.addnext(obj)
+                print('add complete!')
+    
+    def save(self,ofile=None):
+        if not ofile:
+            ofile = 'test.docx'
+        self.doc.save(ofile)
+
+    def replace_para(self,paragraph,new_content):
+        """
+        clear paragraph and add new content
+        """
+        paragraph.clear()
+        paragraph.add_run(new_content)
+    
+        return paragraph
     
