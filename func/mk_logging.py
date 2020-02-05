@@ -8,7 +8,7 @@ import logging
 #basic_log set the basicConfig of logging and return a logger 
 #========================================
 
-def basic_log(name,level=logging.DEBUG,logfile=None,mode="w",log_format=None):
+def basic_log(name,level=logging.DEBUG,logfile=None,filemode="w",log_format=None):
     """
     Set basic logging config and name a logger
     """
