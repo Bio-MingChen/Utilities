@@ -189,3 +189,31 @@ class DocxApi():
     
         return paragraph
     
+    def get_pt_by_size(self,size):
+        """
+        transformation of pt and chinese size 号
+        """
+        pt_hao_trans_dict = {
+                            '八号':5.0,
+                            '七号':5.5,
+                            '小六':6.5,
+                            '六号':7.5,
+                            '小五':9.0,
+                            '五号':10.5,
+                            '小四':12.0,
+                            '四号':14.0,
+                            '小三':13.0,
+                            '三号':16.0,
+                            '小二':18.0,
+                            '二号':22.0,
+                            '小一':24.0,
+                            '一号':26.0,
+                            '小初':36.0,
+                            '初号':42.0,
+                            }
+        if size in pt_hao_trans_dict:
+            # return docx.shared.Pt(pt_hao_trans_dict[size])
+            return pt_hao_trans_dict[size]
+        else:
+            print('Unknown input size,size should be in {keys}'.format(keys=list(pt_hao_trans_dict)))
+            return None
