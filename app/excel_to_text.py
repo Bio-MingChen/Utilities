@@ -28,7 +28,7 @@ def excel_to_txt(args):
             sheet_list += [book.sheetnames[i] for i in sheet_numbers]
         if sheet_names and (sheet_names not in sheet_list):
             sheet_list += sheet_names
-        else:
+        if (not sheet_numbers) and (not sheet_names):
             sheet_list = book.sheetnames
 
         for sheet in sheet_list:
@@ -47,9 +47,9 @@ if __name__ == "__main__":
         epilog='''
         Example:
         
-            excel_to_txt excel  # extract all sheets 
-            excel_to_txt excel --sheet_number 0 1 2
-            excel_to_txt excel --sheet_name "sheet1" "sheetx"
+            excel_to_txt -e excel  # extract all sheets 
+            excel_to_txt -e excel --sheet_number 0 1 2
+            excel_to_txt -e excel --sheet_name "sheet1" "sheetx"
         '''
     )
     parser.add_argument('--excel','-e',required=True,help='Excel Name')
