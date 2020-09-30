@@ -64,7 +64,23 @@ def gopen(filename,mode):
         return gzip.open(filename,mode)
 
     return open(filename,mode)
-
+#========================================
+#file exist and not empty judgement
+# gzip file is not empty even thought it has no content
+#========================================
+def file_exist_and_not_empty(f):
+    """
+    gzip file is not empty even though it has no content!
+    """ 
+    if os.path.exists(f):
+        if f.endswith('gz') and (os.path.getsize(f) < 100):
+            with gopen(f,'r') as indata:
+                if indata.read():
+                    return True 
+        else: 
+            if os.path.getsize(f) != 0:
+                return True
+    return False
 #========================================
 #Class DocxApi help to operate Words easier 
 #like add paragraph,picture or table to the
