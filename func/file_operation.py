@@ -291,9 +291,23 @@ class Getfile():  #下载文件
                 self.down_time=(self.file_total-self.file_size)/1024/1024/self.down_rate
                 print (" "+str('%.2f' %self.down_rate+"MB/s"),end="")
                 self.file_size=os.path.getsize(self.filename)
-            print (" "+str(int(self.down_time))+"s",end="")
-            print (" "+str('%.2f' %(self.file_size/1024/1024))+"MB",end="")
-            view_bar(self.file_size, self.file_total)
+                print (" "+str(int(self.down_time))+"s",end="")
+                print (" "+str('%.2f' %(self.file_size/1024/1024))+"MB",end="")
+                view_bar(self.file_size, self.file_total)
+            
+def progress_bar(url,ofile=None):
+    file1=Getfile(url)
+    file_total=file1.getsize()
+    if not ofile:
+        filename=file1.getfilename()
+    else:
+        filename = ofile
+    print ("下载文件大小："+str('%.2f' % (file_total/1024/1024))+"MB")
+    print ("开始下载文件:"+filename)
+    t1 = threading.Thread(target=file1.downfile,args=(filename,))
+    t1.start()
+    file1.downprogress(filename)
+    
 if __name__ == '__main__':
     url = "https://www.cyberpunk.net/uploads/wallpapers/2560x1600/CP77-KV-zh-cn.jpg"  
     #url可指定下载的文件的url; name可带路径
