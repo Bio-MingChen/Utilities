@@ -233,3 +233,82 @@ class DocxApi():
         else:
             print('Unknown input size,size should be in {keys}'.format(keys=list(pt_hao_trans_dict)))
             return None
+
+#################################################################
+#
+#
+#################################################################
+        import threading
+import os
+import requests
+import time
+import re
+import urllib
+
+def view_bar(num, total):  #显示进度条
+    rate = num/total
+    rate_num = int(rate * 100)
+    number=int(50*rate)
+    r = '\r[%s%s]%d%%' % ("#"*number, " "*(50-number), rate_num, )
+    print("\r {}".format(r),end=" ")   #\r回到行的开头
+    
+class Getfile():  #下载文件
+    def __init__(self,url):
+        self.url=url
+        #self.filename=filename
+        self.re=requests.head(url,allow_redirects=True)  #运行head方法时重定向
+    def getsize(self):
+        try:
+            self.file_total=int(self.re.headers['Content-Length']) #获取下载文件大小    
+            return self.file_total
+        except:
+            print('无法获取下载文件大小')
+            exit()
+    def getfilename(self):  #获取默认下载文件名
+        filename=''
+        if 'Content-Disposition' in self.re.headers:
+            n=self.re.headers.get('Content-Disposition').split('name=')[1]
+            filename=urllib.parse.unquote(n,encoding='utf8')
+        elif os.path.splitext(self.re.url)[1]!='':
+            filename=os.path.basename(self.re.url)
+        return filename
+    def downfile(self,filename):  #下载文件
+        self.r = requests.get(self.url,stream=True)
+        with open(filename, "wb") as f:
+            for chunk in self.r.iter_content(chunk_size=1024): #边下载边存硬盘
+                if chunk:
+                    f.write(chunk)
+        time.sleep(1)
+        #print ("\n下载完成")
+    def downprogress(self,filename):
+        self.filename=filename
+        self.file_size=0
+        self.file_total=self.getsize()
+        while self.file_size<self.file_total:  #获取当前下载进度
+            time.sleep(1)
+            if os.path.exists(self.filename):
+                self.down_rate=(os.path.getsize(self.filename)-self.file_size)/1024/1024
+                self.down_time=(self.file_total-self.file_size)/1024/1024/self.down_rate
+                print (" "+str('%.2f' %self.down_rate+"MB/s"),end="")
+                self.file_size=os.path.getsize(self.filename)
+            print (" "+str(int(self.down_time))+"s",end="")
+            print (" "+str('%.2f' %(self.file_size/1024/1024))+"MB",end="")
+            view_bar(self.file_size, self.file_total)
+if __name__ == '__main__':
+    url = "https://www.cyberpunk.net/uploads/wallpapers/2560x1600/CP77-KV-zh-cn.jpg"  
+    #url可指定下载的文件的url; name可带路径
+ 
+ 
+    #url = input("输入网址:")
+    #while not re.match('^(https?|ftp)://.+$',url):
+    #    url = input("网址格式错误，请重新输入:")
+    file1=Getfile(url)
+    file_total=file1.getsize()
+    filename=file1.getfilename()
+    if filename=='':
+        filename=input('无法获取下载文件名,请自行输入:')
+    print ("下载的文件为："+str('%.2f' % (file_total/1024/1024))+"MB")
+    print ("开始下载文件:"+filename)
+    t1 = threading.Thread(target=file1.downfile,args=(filename,))
+    t1.start()
+    file1.downprogress(filename)
