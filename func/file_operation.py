@@ -235,10 +235,10 @@ class DocxApi():
             return None
 
 #################################################################
-#
-#
+# download process bar
+# 
 #################################################################
-        import threading
+import threading
 import os
 import requests
 import time
